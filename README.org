@@ -1,0 +1,33 @@
+* What is?
+mail-web-page is a small program to screen-scrape a given URL and email it to a pre-defined address. It is configured in plain python, thus allowing advanced hacks.
+* Requirements
+Beautiful Soup
+* Usage
+On invocation the program will look for the ~/.mail-web-page-config.py file, which should look something like this:
+
+: import smtplib
+: 
+: def filter_google(url, soup):
+:   return soup
+:     
+: 
+: prefilter = [("http://(www.)?google.com(/)?.*", filter_google),
+:            ("http://.*", lambda url, soup: soup)]
+: 
+: postfilter = []
+: 
+: mail_from = "mail-web-page@localhost"
+: mail_to = "albin@localhost"
+: 
+: def send_mail(mfr, mto, msg):
+:     s = smtplib.SMTP('localhost')
+:     s.sendmail(mfr, mto, msg.as_string())
+:     s.quit()
+
+The tuples in pre/postfilter will be matched from top to bottom; when the regular expression matches the url, the fetched beautiful soup object will be passed to the specified function. If no matching is needed, supply an empty list.
+
+Prefilters will be applied directly after the content has been fetched. Postfilters will be applied after mail-web-page's internal mangling, just before the email HTML code is generated.
+
+The variables »mail_from« and »mail_to« supplies information of who should recieve the mail, and the function »send_mail« defines how they should be sent. Here it uses localhost's SMTP server, but it could as well deliver them directly to a Maildir if needed.
+
+The URL to fetch and mail is supplied via the command line, as the first argument.
