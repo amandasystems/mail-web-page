@@ -11,7 +11,7 @@ config = imp.load_source("config", os.path.expanduser('~/.mail-web-page-config.p
 def filter_soup(rules, url, soup):
     for rule in rules:
         if re.match(rule[0], url):
-            print "Rule %s matches" % rule[0]
+            #print "Rule %s matches" % rule[0]
             return (True, rule[1](url, soup))
     return (False, soup) # no rule matched: return input data and a flag telling so.
 
