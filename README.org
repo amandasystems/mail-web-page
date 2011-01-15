@@ -31,3 +31,7 @@ Prefilters will be applied directly after the content has been fetched. Postfilt
 The variables »mail_from« and »mail_to« supplies information of who should recieve the mail, and the function »send_mail« defines how they should be sent. Here it uses localhost's SMTP server, but it could as well deliver them directly to a Maildir if needed.
 
 The URL to fetch and mail is supplied via the command line, as the first argument.
+
+* Useful hints
+If you set [[https://github.com/arrix/node-readability][up arrix' node.js implementation of Arc 90's Readability]], you can use it to filter away unnecessary input in web pages. Please see readability.js (and its shell wrapper readability.sh), as well as the actual configuration in mail-web-page-config.py for examples.
+

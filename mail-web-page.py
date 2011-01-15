@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+# -*- encoding:utf-8 -*-
 
 from BeautifulSoup import BeautifulSoup as bs
-import urllib, sys, re, os, ConfigParser, imp
+import urllib, sys, re, os, imp
 from email.mime.text import MIMEText
 
 # init conf object
@@ -17,9 +18,14 @@ def filter_soup(rules, url, soup):
 
 def format_html_message(url, rules, soup):
     contents = filter_soup(rules, url, soup)[1]
+    try:
+        title = soup.head.title.contents[0].encode("utf-8")
+    except:
+        title = contents.head.title.contents
+        
     return '<h1><a href="%s">%s</h1></a></h1>' % \
-        (url, soup.head.title.contents[0].encode("utf-8")) \
-        + contents.prettify()
+        (url, title) \
+        + str(contents)
 
 
 url = sys.argv[1]
@@ -28,10 +34,12 @@ soup = bs(f)
 
 preprocessed = filter_soup(config.prefilter, url, soup)[1]
 
-msg = MIMEText(format_html_message(url, config.postfilter, preprocessed), "html")
+fmsg = format_html_message(url, config.postfilter, preprocessed)
+
+msg = MIMEText(fmsg, "html")
 
 msg['X-Entry-URL'] = url
-msg['Subject'] = preprocessed.head.title.contents[0].encode("utf-8")
+msg['Subject'] = unicode(preprocessed.head.title.contents[0])
 msg['From'] = config.mail_from
 msg['To'] = config.mail_to
 
