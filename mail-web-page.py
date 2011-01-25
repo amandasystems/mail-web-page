@@ -2,7 +2,7 @@
 # -*- encoding:utf-8 -*-
 
 from BeautifulSoup import BeautifulSoup as bs
-import urllib, sys, re, os, imp
+import urllib2, sys, re, os, imp
 from email.mime.text import MIMEText
 
 # init conf object
@@ -29,7 +29,9 @@ def format_html_message(url, rules, soup):
 
 
 url = sys.argv[1]
-f = urllib.urlopen(url)
+opener = urllib2.build_opener()
+opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+f = opener.open(url)
 soup = bs(f)
 
 preprocessed = filter_soup(config.prefilter, url, soup)[1]
