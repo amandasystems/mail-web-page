@@ -2,7 +2,7 @@
 # -*- encoding:utf-8 -*-
 
 from BeautifulSoup import BeautifulSoup as bs
-import urllib2, sys, re, os, imp
+import urllib2, sys, re, os, imp, urlparse
 from email.mime.text import MIMEText
 
 # init conf object
@@ -40,7 +40,7 @@ msg = MIMEText(fmsg, "html")
 
 msg['X-Entry-URL'] = url
 msg['Subject'] = unicode(preprocessed.head.title.contents[0])
-msg['From'] = config.mail_from
+msg['From'] = "%s <%s>" % (urlparse.urlparse(url).hostname, config.mail_from)
 msg['To'] = config.mail_to
 
 config.send_mail(config.mail_from, config.mail_to, msg)
