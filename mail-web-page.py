@@ -43,5 +43,4 @@ msg['Subject'] = unicode(preprocessed.head.title.contents[0])
 msg['From'] = config.mail_from
 msg['To'] = config.mail_to
 
-print "trying to send message to server"
 config.send_mail(config.mail_from, config.mail_to, msg)
