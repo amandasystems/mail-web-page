@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # -*- encoding:utf-8 -*-
 
 from BeautifulSoup import BeautifulSoup as bs
@@ -35,9 +35,7 @@ f = opener.open(url)
 soup = bs(f)
 
 preprocessed = filter_soup(config.prefilter, url, soup)[1]
-
 fmsg = format_html_message(url, config.postfilter, preprocessed)
-
 msg = MIMEText(fmsg, "html")
 
 msg['X-Entry-URL'] = url
@@ -45,4 +43,5 @@ msg['Subject'] = unicode(preprocessed.head.title.contents[0])
 msg['From'] = config.mail_from
 msg['To'] = config.mail_to
 
+print "trying to send message to server"
 config.send_mail(config.mail_from, config.mail_to, msg)
