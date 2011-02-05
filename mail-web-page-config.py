@@ -11,9 +11,9 @@ def filter_with_readability(url, soup):
     interface to the node.js implementation of Arc 90's
     Readability."""
     p = subprocess.Popen(
-        ['/home/albin/.bin/readability.sh', url],
-        stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-        shell=False)
+        ['/home/albin/local/bin/node',
+         '/home/albin/projects/readability/readability.js', 
+         url],
     stdout, stderr = p.communicate(input=str(soup))
     return bs(stdout)
         
