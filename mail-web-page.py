@@ -22,6 +22,13 @@ def format_html_message(url, rules, soup):
         title = soup.head.title.contents[0].encode("utf-8")
     except:
         title = contents.head.title.contents
+
+    # make relative links absolute
+    for a in contents.findAll("a"):
+        oldlink = a.get('href')
+        if oldlink and oldlink[:1] == "/":
+            href = urlparse.urljoin(url, oldlink)
+            a['href'] = href
         
     return '<h1><a href="%s">%s</h1></a></h1>' % \
         (url, title) \
