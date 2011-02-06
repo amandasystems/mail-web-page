@@ -31,21 +31,24 @@ def format_html_message(url, rules, soup):
     # make relative links absolute
     for a in contents.findAll("a"):
         oldlink = a.get('href')
-        if oldlink and oldlink[:1] == "/":
+        if oldlink and (oldlink[:1] == '/' or oldlink[:1] == "."):
             href = urlparse.urljoin(url, oldlink)
             a['href'] = href
 
     # base64-encode and embed images into HTML
     for img in contents.findAll("img"):
-        if img['src'][:1] == "/":
+        if img['src'][:1] == "/" or img['src'][:1] == '.':
             imgurl = urlparse.urljoin(url, img['src'])
         else:
             imgurl = img['src']
         op = urllib2.build_opener()
         op.addheaders = [('User-agent', 'Mozilla/5.0')]
-        imgdata = op.open(imgurl)
-        imgtype, imgenc = mimetypes.guess_type(imgurl)
-        img['src'] = base64encode_image(imgdata, imgtype, "utf-8")
+        try:
+            imgdata = op.open(imgurl)
+            imgtype, imgenc = mimetypes.guess_type(imgurl)
+            img['src'] = base64encode_image(imgdata, imgtype, "utf-8")
+        except ValueError:
+            print "Warning: could not fetch image with URL %s." %imgurl
         
     return '<h1><a href="%s">%s</h1></a></h1>' % \
         (url, title) \
