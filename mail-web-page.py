@@ -59,7 +59,7 @@ url = sys.argv[1]
 opener = urllib2.build_opener()
 opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 f = opener.open(url)
-soup = bs(f)
+soup = bs(f, convertEntities=bs.ALL_ENTITIES)
 
 preprocessed = filter_soup(config.prefilter, url, soup)[1]
 fmsg = format_html_message(url, config.postfilter, preprocessed)
